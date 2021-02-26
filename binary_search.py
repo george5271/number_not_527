@@ -31,7 +31,7 @@ def add(message):
                                       " case and get some phrases from me.")
 default_global_dict = {'left_index' : 0, 'right_index': 100, 'count' : 0}
 
-
+users = {}
 
 @bot.message_handler(commands=['play'])
 def play_game(message):
