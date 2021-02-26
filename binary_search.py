@@ -6,32 +6,31 @@ bot = telebot.TeleBot(binary_config.TOKEN)
 
 
 
-# @bot.message_handler(commands=['start'])
-# def start_command(message):
-#     bot.send_message(message.chat.id, f'Hi, {message.from_user.first_name}'
-#                                       f'\nI\'m George\'s first Bot, nice to see you here.')
-#
-#     bot.send_sticker(message.chat.id, binary_config.start_sticker)
-#
-#
-# @bot.message_handler(commands=['help'])
-# def help_command(message):
-#     bot.send_message(message.chat.id, binary_config.help_rules)
-#
-#
-# @bot.message_handler(commands=['get_example'])
-# def give_example(message):
-#     bot.send_message(message.chat.id, 'Here is your example:')
-#     bot.send_photo(message.chat.id, photo=open('example_for_bot.png', 'rb'))
-#
-#
-# @bot.message_handler(commands=['additional'])
-# def add(message):
-#     bot.send_message(message.chat.id, "You can also type me 'hi' or 'hello', 'i luv u' or 'I LOVE YOU' and 'bye' in ANY"
-#                                       " case and get some phrases from me.")
-# default_global_dict = {'left_index' : 0, 'right_index': 100, 'count' : 0}
+@bot.message_handler(commands=['start'])
+def start_command(message):
+    bot.send_message(message.chat.id, f'Hi, {message.from_user.first_name}'
+                                      f'\nI\'m George\'s first Bot, nice to see you here.')
 
-users ={}
+    bot.send_sticker(message.chat.id, binary_config.start_sticker)
+
+
+@bot.message_handler(commands=['help'])
+def help_command(message):
+    bot.send_message(message.chat.id, binary_config.help_rules)
+
+
+@bot.message_handler(commands=['get_example'])
+def give_example(message):
+    bot.send_message(message.chat.id, 'Here is your example:')
+    bot.send_photo(message.chat.id, photo=open('example_for_bot.png', 'rb'))
+
+
+@bot.message_handler(commands=['additional'])
+def add(message):
+    bot.send_message(message.chat.id, "You can also type me 'hi' or 'hello', 'i luv u' or 'I LOVE YOU' and 'bye' in ANY"
+                                      " case and get some phrases from me.")
+default_global_dict = {'left_index' : 0, 'right_index': 100, 'count' : 0}
+
 
 
 @bot.message_handler(commands=['play'])
