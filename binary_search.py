@@ -32,6 +32,10 @@ def add(message):
                                       " case and get some phrases from me.")
 
 
+gen_stat_list = {'good_gen_games': 0, 'dirt_gen_games': 0, 'gen_game_count': 0}  # Dict with general statistics data
+# (initially all values are 0)
+
+
 @bot.message_handler(commands=['statistics'])  # The beginning of statistics command, more below
 def stats_1(message):
     stats_keyboard = types.InlineKeyboardMarkup()  # Adding a kb with buttons: My, General.
@@ -41,9 +45,6 @@ def stats_1(message):
     bot.send_message(message.chat.id, 'Choose a kind of statistic you want to see:',
                      reply_markup=stats_keyboard)  # Redirecting to next menu
 
-
-gen_stat_list = {'good_gen_games': 0, 'dirt_gen_games': 0, 'gen_game_count': 0}  # Dict with general statistics data
-# (initially all values are 0)
 
 users = {}  # Dict with users sessions(to have an possibility more than one user can play with bot correctly)
 
@@ -94,8 +95,8 @@ def send_response(message, user_session):  # Sending bot\'s calculated number on
                      reply_markup=user_sign_kb)
 
 
-call_variants = ['less', 'more',
-                 'equal']  # Call can be only of of them to get inside this query handler (idk why, but this and
+call_variants = ['less', 'more', 'equal']
+# Call can be only of of them to get inside this query handler (idk why, but this and
 
 
 # handler below are unable to work together.)
