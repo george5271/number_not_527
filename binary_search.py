@@ -2,7 +2,7 @@ import telebot
 from telebot import types
 import binary_config
 
-bot = telebot.TeleBot('1696707809:AAFFodFELNqjetQkbL1c52xTthAD7UYjCl0')
+bot = telebot.TeleBot(binary_config.TOKEN)
 
 
 @bot.message_handler(commands=['start'])  # Start command handler - Greeting
