@@ -33,6 +33,8 @@ def add(message):
 
 
 gen_stat_list = {'good_gen_games': 0, 'dirt_gen_games': 0, 'gen_game_count': 0}  # Dict with general statistics data
+
+
 # (initially all values are 0)
 
 
@@ -52,7 +54,7 @@ users = {}  # Dict with users sessions(to have an possibility more than one user
 @bot.message_handler(commands=['play'])
 def play_game(message):
     user_session = get_session(message)  # Making a session for user
-
+    user_session['active_play'] = True
     gen_stat_list['gen_game_count'] += 1  # Updating current variables
     user_session['user_game_count'] += 1
 
@@ -69,7 +71,8 @@ def get_session(message):
     else:  # If user has never played yet, editing a new session
         user_session = {'user_id': user_id, 'username': message.from_user.first_name,
                         'good_user_games': 0, 'dirt_user_games': 0,
-                        'user_game_count': 0}  # Добавил хорошо и плохо сыгранные игры, и вообще все игры (Статистика
+                        'user_game_count': 0,
+                        'active_play': False}  # Добавил хорошо и плохо сыгранные игры, и вообще все игры (Статистика
         # только этого пользователя)
         users[user_id] = user_session  # And adding to users
     return user_session
@@ -96,6 +99,8 @@ def send_response(message, user_session):  # Sending bot\'s calculated number on
 
 
 call_variants = ['less', 'more', 'equal']
+
+
 # Call can be only of of them to get inside this query handler (idk why, but this and
 
 
@@ -105,6 +110,8 @@ call_variants = ['less', 'more', 'equal']
 @bot.callback_query_handler(func=lambda call: call.data in call_variants)
 def answer(call):
     user_session = get_session(call)
+    if not user_session['active_play']:
+        return
     message = call.message
     centre_index = (user_session['left_index'] + user_session['right_index']) // 2
 
@@ -113,6 +120,7 @@ def answer(call):
         bot.send_message(message.chat.id, 'Thank you for playing!')
         user_session['good_user_games'] += 1  # Добавляется хорошо сыгранная игра в счетчик пользователя
         gen_stat_list['good_gen_games'] += 1
+        user_session['active_play'] = False
 
     else:  # If user's answer != '='(equal)
         if call.data == 'less':
@@ -126,6 +134,7 @@ def answer(call):
                                                    "\nYou can play again, just type '/' and choose 'play'")
             user_session['dirt_user_games'] += 1  # Добавляется плохо сыгранная игра в счетчик пользователя
             gen_stat_list['dirt_gen_games'] += 1
+            user_session['active_play'] = False
 
         else:
             send_response(message, user_session)
@@ -278,25 +287,3 @@ def get_text(message):
 
 
 bot.polling(none_stop=True, interval=0)
-
-# A previous version of getting ALL(FULL) Statistic (General and my), but it occured impossible to make, due to unavailable way
-# to return variables by it's index name(they were the same with the global dictionaries names) but there were 2 types of destinations
-# and there is no way to indicate from which glob.dict i should get or my or general variables...
-# i decided to make easier and just write it with hands, cuz there is just two types ot them, not hundred.
-# There is a code of this thing below, maybe i will make it working one day, but there is no matter of doing this.
-
-# full_val_dict[my_all_stat.callback_data] = [[x.text for x in my_list_buttons],   #Getting full story of mine from three another variables(buttons in keyboard)
-# [x.callback_data for x in my_list_buttons]
-# ]
-
-# full_val_dict[gen_all_stat.callback_data] = [[x.text for x in gen_list_buttons],  Doing the same, but with general variables
-#                                              [x.callback_data for x in gen_list_buttons]
-#                                              ]
-
-
-#
-# elif call.data in full_val_dict.keys():
-# bot.send_message(message.chat.id, f'<pre>{full_val_dict[call.data][0][0]}:{full_val_dict[call.data][1][0]}\n'
-#                                   f'{full_val_dict[call.data][0][1]}:{full_val_dict[call.data][1][1]}\n'
-#                                   f'{full_val_dict[call.data][0][2]}:{full_val_dict[call.data][1][2]}</pre>',
-#                  parse_mode='HTML')
