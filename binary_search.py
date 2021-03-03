@@ -111,9 +111,9 @@ call_variants = ['less', 'more', 'equal']
 def answer(call):
     user_session = get_session(call)
     message = call.message
-    error_msg = bot.send_message(chat_id= message.chat.id, text= 'Opps, you haven\'t pressed /play yet.')
     if not user_session['active_play']:
-        return error_msg
+        error_msg = bot.send_message(chat_id=message.chat.id, text='Opps, you haven\'t pressed /play yet.')
+        return
 
     centre_index = (user_session['left_index'] + user_session['right_index']) // 2
 
