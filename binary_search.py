@@ -110,9 +110,11 @@ call_variants = ['less', 'more', 'equal']
 @bot.callback_query_handler(func=lambda call: call.data in call_variants)
 def answer(call):
     user_session = get_session(call)
-    if not user_session['active_play']:
-        return
     message = call.message
+    error_msg = bot.send_message(chat_id= message.chat.id, text= 'Opps, you haven\'t pressed /play yet.')
+    if not user_session['active_play']:
+        return error_msg
+
     centre_index = (user_session['left_index'] + user_session['right_index']) // 2
 
     if call.data == 'equal':
